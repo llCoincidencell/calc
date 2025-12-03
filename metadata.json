@@ -1,0 +1,5 @@
+{
+  "name": "Lot Maliyet ve Kar/Zarar Hesaplayıcı",
+  "description": "Hisse senedi ortalama maliyet, toplam lot ve anlık fiyata göre kar/zarar durumunu hesaplayan pratik araç.",
+  "requestFramePermissions": []
+}
