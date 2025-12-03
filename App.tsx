@@ -114,8 +114,8 @@ const App: React.FC = () => {
     
     return currentTransactions.map(t => {
       const isActive = t.isActive !== false;
-      let realizedPL = null;
-      let realizedPLPercent = 0;
+      let realizedPL: number | null = null;
+      let realizedPLPercent: number = 0;
 
       // Calculate stats BEFORE this transaction affects the pool (for Sales)
       // or AFTER (for Buys - though for buys we usually care about future price)
@@ -490,7 +490,7 @@ const App: React.FC = () => {
               ) : (
                 <>
                   <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight truncate">{activeSymbol}</h2>
-                  <button onClick={startRenaming} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all shrink-0"><Pencil className="w-3.5 h-3.5" /></button>
+                  <button onClick={startRenaming} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all shrink-0"><Pencil className="w-3.5 h-3.5" /></button>
                 </>
               )}
            </div>
@@ -592,7 +592,7 @@ const App: React.FC = () => {
                                   {simulation.status === 'PROFIT' ? 'Net Kar' : 'Net Zarar'}
                                </p>
                                <p className={`text-2xl sm:text-3xl font-black tracking-tight leading-none ${simulation.status === 'PROFIT' ? 'text-emerald-600' : 'text-rose-600'}`}>
-                                  {simulation.profitOrLossTotal > 0 ? '+' : ''}{formatCurrency(simulation.profitOrLossTotal)}
+                                  {simulation.profitOrLossTotal > 0 ? '+' : ''}{formatCurrency(simulation.profitOrLossTotal ?? 0)}
                                </p>
                             </div>
                             
@@ -601,7 +601,7 @@ const App: React.FC = () => {
                                <div className="flex items-center gap-1">
                                   {simulation.status === 'PROFIT' ? <TrendingUp className="w-3.5 h-3.5 text-emerald-500"/> : <TrendingDown className="w-3.5 h-3.5 text-rose-500"/>}
                                   <span className={`text-base font-bold font-mono ${simulation.status === 'PROFIT' ? 'text-emerald-600' : 'text-rose-600'}`}>
-                                     {simulation.profitOrLossPerShare > 0 ? '+' : ''}{formatNumber(simulation.profitOrLossPerShare)}
+                                     {simulation.profitOrLossPerShare > 0 ? '+' : ''}{formatNumber(simulation.profitOrLossPerShare ?? 0)}
                                   </span>
                                </div>
                             </div>
@@ -609,7 +609,7 @@ const App: React.FC = () => {
                             <div className="col-span-1 md:w-auto text-left md:text-right">
                                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wide mb-0.5">Değişim</p>
                                 <div className={`text-lg font-bold tracking-tight ${simulation.status === 'PROFIT' ? 'text-emerald-600' : 'text-rose-600'}`}>
-                                   % {formatNumber(simulation.percentageChange)}
+                                   % {formatNumber(simulation.percentageChange ?? 0)}
                                 </div>
                             </div>
                          </div>
@@ -647,12 +647,12 @@ const App: React.FC = () => {
                                             <div className="bg-slate-900 rounded-lg px-3 py-1.5 text-white shadow-md flex justify-between items-center h-9">
                                                <div className="flex items-center gap-2">
                                                   <span className="text-[10px] text-slate-400 font-bold uppercase">Al:</span>
-                                                  <span className="text-sm font-bold text-emerald-400">{formatNumber(costAveragingData.requiredQty)} Lot</span>
+                                                  <span className="text-sm font-bold text-emerald-400">{formatNumber(costAveragingData.requiredQty ?? 0)} Lot</span>
                                                </div>
                                                <div className="h-4 w-px bg-slate-700 mx-2"></div>
                                                <div className="flex items-center gap-2">
                                                   <span className="text-[10px] text-slate-400 font-bold uppercase">Tutar:</span>
-                                                  <span className="text-sm font-mono text-white">{formatCurrency(costAveragingData.requiredCapital)}</span>
+                                                  <span className="text-sm font-mono text-white">{formatCurrency(costAveragingData.requiredCapital ?? 0)}</span>
                                                </div>
                                             </div>
                                          )
@@ -737,14 +737,14 @@ const App: React.FC = () => {
                                 Yeni Ortalama
                              </span>
                              <span className={`text-sm font-bold bg-white px-1.5 py-0.5 rounded shadow-sm ${transactionType === 'BUY' ? 'text-emerald-700' : 'text-rose-700'}`}>
-                                {formatCurrency(previewData.newAvg)}
+                                {formatCurrency(previewData.newAvg ?? 0)}
                              </span>
                           </div>
                           {!previewData.isFirst && Math.abs(previewData.diff) > 0.001 && (
                              <div className="flex items-center justify-end text-[10px] pt-1 mt-1 border-t border-gray-200/30">
                                 <span className={`flex items-center font-bold px-1.5 rounded-full ${previewData.diff > 0 ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}`}>
                                    {previewData.diff > 0 ? <TrendingUp className="w-3 h-3 mr-1"/> : <TrendingDown className="w-3 h-3 mr-1"/>}
-                                   {previewData.diff > 0 ? '+' : ''}{formatNumber(previewData.diff)} ₺
+                                   {previewData.diff > 0 ? '+' : ''}{formatNumber(previewData.diff ?? 0)} ₺
                                 </span>
                              </div>
                           )}
@@ -755,7 +755,7 @@ const App: React.FC = () => {
                                     Realize Edilecek Kar/Zarar
                                  </span>
                                  <span className={`text-xs font-bold ${previewData.estimatedRealizedPL >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
-                                    {previewData.estimatedRealizedPL > 0 ? '+' : ''}{formatCurrency(previewData.estimatedRealizedPL)}
+                                    {previewData.estimatedRealizedPL > 0 ? '+' : ''}{formatCurrency(previewData.estimatedRealizedPL ?? 0)}
                                  </span>
                               </div>
                           )}
@@ -848,20 +848,20 @@ const App: React.FC = () => {
                                          {isBuy && simulationPrice && displayPL !== null ? (
                                             <div className={`inline-flex items-center gap-2 px-2 py-1 rounded border ${isActive ? displayClass : 'text-gray-400 border-transparent'}`}>
                                                <span className="font-bold text-xs">
-                                                  {displayPLAmount > 0 ? '+' : ''}{formatCurrency(displayPLAmount)}
+                                                  {displayPLAmount > 0 ? '+' : ''}{formatCurrency(displayPLAmount ?? 0)}
                                                </span>
                                                <span className="text-[9px] font-semibold opacity-80 border-l border-current pl-1">
-                                                  %{formatNumber(displayPercent)}
+                                                  %{formatNumber(displayPercent ?? 0)}
                                                </span>
                                             </div>
                                          ) : isRealized && displayPL !== null ? (
                                             <div className="flex flex-col items-start gap-0.5">
                                                <div className={`inline-flex items-center gap-2 px-2 py-1 rounded border ${isActive ? displayClass : 'text-gray-400 border-transparent'}`}>
                                                   <span className="font-bold text-xs">
-                                                     {displayPLAmount > 0 ? '+' : ''}{formatCurrency(displayPLAmount)}
+                                                     {displayPLAmount > 0 ? '+' : ''}{formatCurrency(displayPLAmount ?? 0)}
                                                   </span>
                                                   <span className="text-[9px] font-semibold opacity-80 border-l border-current pl-1">
-                                                     %{formatNumber(displayPercent)}
+                                                     %{formatNumber(displayPercent ?? 0)}
                                                   </span>
                                                </div>
                                                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight ml-0.5">Realize Edildi</span>
